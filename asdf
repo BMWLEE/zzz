@@ -1,0 +1,256 @@
+      USE DFLIB
+	USE DFPORT
+
+	DIMENSION NODEV(100),FP(10,4),GFNODE(100)! &
+!			X(5,20,100,12100),Y(5,20,100,12100),Z(5,20,100,12100)
+
+	CHARACTER dummy*60,DESC(100)*60,PCHFN(50)*15,FN*15,DIR(20)*6, &
+			gf*1,th*1,INFN*60,fonm(20)*6
+	REAL MCR
+
+	DIMENSION GFRPM(20,100,800),GFV(20,100,800),GFL(20,100,800),GFT(20,100,800), &
+			GFVAS(20,100,800),GFLAS(20,100,800),GFTAS(20,100,800)
+	integer forn,NTF,MIN,MAX,INC,NVIEW,sss
+
+	WRITE(*,9999)
+9999	format(25(/),' Input Data Filename(EX: N000.DAT) ? : ',$)
+	READ(*,'(A)') INFN
+
+	OPEN(7,FILE=INFN)
+	open(23,file='FOR_SUM_DATA.dat')
+    open(30,file='sumtest30.out')
+    open(40,file='sumtest40.out')
+
+!
+!	READ NODE NO AND LOCATION TO VIEW
+	READ(7,*)
+	READ(7,*) NFILE
+
+	READ(7,*)
+
+	DO IFI=1,NFILE
+	READ(7,*) PCHFN(IFI)
+	ENDDO
+
+	READ(7,*)
+	READ(7,*) NCASE
+	
+	READ(7,*)
+	READ(7,*) NNODE
+
+	READ(7,*)
+	READ(7,*) NFREQ
+
+	READ(7,*)
+	READ(7,*) MCR,NB
+
+	READ(7,*)
+	READ(7,*) MIN,MAX,INC
+
+	READ(7,*)
+	READ(7,'(I2)')IFP
+
+	READ(7,*)
+	DO I=1,NFILE
+	READ(7,*) (FP(I,J),J=1,IFP)
+	ENDDO
+
+	READ(7,*)
+	READ(7,'(A)')GF
+	READ(7,*)
+	READ(7,'(F10.3)')HGT
+
+	READ(7,*)
+	READ(7,'(A)')TH
+	
+	READ(7,*)
+	READ(7,100)NVIEW
+	READ(7,*)
+	DO I=1,NVIEW
+		READ(7,200)NODEV(I),DESC(I)
+	ENDDO
+
+	READ(7,*)
+	READ(7,100)forn
+	READ(7,*)
+	DO IFN=1,forn
+	READ(7,300)fonm(IFN)
+	ENDDO
+
+		NTF=MAX-MIN+1
+
+100 FORMAT(I5)
+200 FORMAT(I7,A60)
+300 FORMAT(A6)
+
+
+	DO IFN=1,forn
+		FN=fonm(IFN)
+	READ(FN(1:6),'(A6)')DIR(IFN)
+	open(6,file=FN)
+	read(6,'(a)') dummy
+		do j=1,NVIEW
+		read(6,13)GFNODE(j)
+		write(23,12)GFNODE(j)
+			do i=1,NTF
+			read(6,14)GFRPM(IFN,j,i),GFV(IFN,j,i),GFL(IFN,j,i),GFT(IFN,j,i)
+			write(23,14)GFRPM(IFN,j,i),GFV(IFN,j,i),GFL(IFN,j,i),GFT(IFN,j,i)
+			enddo
+		enddo
+	enddo
+	
+
+1	format(13x,i10)
+2   format(E16.6,8x,E12.5,6x,E12.5,6x,E12.5)
+12	format(i6)
+13	format(12x,i6)
+14  format(F10.3,E20.10,E20.10,E20.10)
+
+    PI = 3.14159265358979
+    PIT = 0.028*2.0*PI
+      
+    DO IFN=1,forn
+		IF(fonm(IFN).EQ.'1ST_GF' .OR. fonm(IFN).EQ.'1st_AF')THEN
+		sss=1        
+		elseIF(fonm(IFN).EQ.'2ND_GF' .OR. fonm(IFN).EQ.'2ND_AF')THEN
+		sss=2        
+		elseIF(fonm(IFN).EQ.'3RD_GF' .OR. fonm(IFN).EQ.'3RD_AF')THEN
+		sss=3
+		elseIF(fonm(IFN).EQ.'1ST_GF' .OR. fonm(IFN).EQ.'1st_AF')THEN
+		sss=1
+		elseIF(fonm(IFN).EQ.'2ND_GF' .OR. fonm(IFN).EQ.'2ND_AF')THEN
+		sss=2
+		elseIF(fonm(IFN).EQ.'3RD_GF' .OR. fonm(IFN).EQ.'3RD_AF')THEN
+		sss=3
+		elseIF(fonm(IFN).EQ.'4TH_GF' .OR. fonm(IFN).EQ.'4TH_AF')THEN
+		sss=4
+		elseIF(fonm(IFN).EQ.'5TH_GF' .OR. fonm(IFN).EQ.'5TH_AF')THEN
+		sss=5
+		elseIF(fonm(IFN).EQ.'6TH_GF' .OR. fonm(IFN).EQ.'6TH_AF')THEN
+		sss=6
+		elseIF(fonm(IFN).EQ.'7TH_GF' .OR. fonm(IFN).EQ.'7TH_AF')THEN
+		sss=7
+		elseIF(fonm(IFN).EQ.'8TH_GF' .OR. fonm(IFN).EQ.'8TH_AF')THEN
+		sss=8
+		elseIF(fonm(IFN).EQ.'9TH_GF' .OR. fonm(IFN).EQ.'9TH_AF')THEN
+		sss=9
+		elseIF(fonm(IFN).EQ.'10TH_GF' .OR. fonm(IFN).EQ.'10TH_AF')THEN
+		sss=10
+		elseIF(fonm(IFN).EQ.'11TH_GF' .OR. fonm(IFN).EQ.'11TH_AF') THEN
+		sss=11
+		elseIF(fonm(IFN).EQ.'12TH_GF' .OR. fonm(IFN).EQ.'12TH_AF') THEN
+		sss=12
+		elseIF(fonm(IFN).EQ.'13TH_GF' .OR. fonm(IFN).EQ.'13TH_AF') THEN
+		sss=13
+		elseIF(fonm(IFN).EQ.'14TH_GF' .OR. fonm(IFN).EQ.'14TH_AF') THEN
+		sss=14
+		elseIF(fonm(IFN).EQ.'15TH_GF' .OR. fonm(IFN).EQ.'15TH_AF') THEN
+		sss=15
+		elseIF(fonm(IFN).EQ.'16TH_GF' .OR. fonm(IFN).EQ.'16TH_AF') THEN
+		sss=16
+		elseIF(fonm(IFN).EQ.'PR_1ST') THEN
+		sss=1*NB
+		elseIF(fonm(IFN).EQ.'PR_2ND') THEN
+		sss=2*NB
+		elseIF(fonm(IFN).EQ.'PR_3RD') THEN
+		sss=3*NB
+		elseIF(fonm(IFN).EQ.'PR_4TH') THEN
+		sss=4*NB
+		ENDIF
+		write(30,25) sss
+		do j=1,NVIEW
+            write(30,22)GFNODE(j)
+			do i=1,NTF
+    
+		GGGA=(PIT*(GFRPM(IFN,j,i)*sss/60.))/(SQRT(1.+(((10.**0.1)*(GFRPM(IFN,j,i)*sss/60.))**(-4.))) &
+            *SQRT(1.+((0.01*(GFRPM(IFN,j,i)*sss/60.))**4.))*SQRT(1.+(PIT*(GFRPM(IFN,j,i)*sss/60.))**2.))
+		GFV(IFN,j,i)=(GFV(IFN,j,i)*GGGA)**2.
+		GFL(IFN,j,i)=(GFL(IFN,j,i)*GGGA)**2.
+		GFT(IFN,j,i)=(GFT(IFN,j,i)*GGGA)**2.
+        write(30,24) GFRPM(IFN,j,i),GFV(IFN,j,i),GFL(IFN,j,i),GFT(IFN,j,i)
+            enddo
+		enddo
+    enddo
+    
+    
+ GFVAS(IFN,j,i)=0
+ GFLAS(IFN,j,i)=0
+ GFTAS(IFN,j,i)=0
+
+    
+    
+    DO IFN=1,forn
+        do j=1,NVIEW
+        !    if (GFNODE(j) .EQ. NODEV(j)) then
+            write(40,22)GFNODE(j)
+			do i=1,NTF
+!if (GFRPM(IFN,j,i) .EQ. i+19) then
+                
+		GFVAS(IFN,j,i)=GFVAS(IFN,j,i)+GFV(IFN,j,i)
+		GFLAS(IFN,j,i)=GFLAS(IFN,j,i)+GFL(IFN,j,i)
+		GFTAS(IFN,j,i)=GFTAS(IFN,j,i)+GFT(IFN,j,i)
+!
+!		GFVAS(IFN,j,i)=(GFVAS(IFN,j,i)+GFV(IFN,j,i))
+!		GFLAS(IFN,j,i)=(GFLAS(IFN,j,i)+GFL(IFN,j,i))
+!		GFTAS(IFN,j,i)=(GFTAS(IFN,j,i)+GFT(IFN,j,i))
+        write(40,24) GFRPM(IFN,j,i),GFVAS(IFN,j,i),GFLAS(IFN,j,i),GFTAS(IFN,j,i)
+      !  endif
+        enddo
+       ! endif
+		enddo
+    enddo
+
+22	format(i6)
+24  format(F10.3,E20.10,E20.10,E20.10)
+25  format(i2)
+!      READ(INFN(1:4),'(A4)')DNAME
+!	STATUS=MAKEDIRQQ(DNAME)
+!		
+!
+!	IF(GF .EQ. 'Y' .OR. GF .EQ. 'y') THEN 
+!	WRITE(*,9997)
+! 9997 format(25(/),' GUIDE FORCE Input Filename(EX: N000.GF) ? : ',$)
+!      READ(*,'(A)') GFFN
+!	
+!	open(20,file=GFFN)
+!	 CALL READGFORCE(NTF,NRPM,GRPM,GFRE,GFOR,GGGG,GFXG)
+!	ENDIF
+!
+!	IF(TH .EQ. 'Y' .OR. TH .EQ. 'y') THEN 
+!
+!      WRITE(*,9998)
+! 9998 format(25(/),' THRUST FORCE Input Filename(EX: N000.TF) ? : ',$)
+!      READ(*,'(A)') THFN 
+!	OPEN(10,file=THFN)
+!       CALL READTFORCE(NTF,NRPM,TORD,TRPM,TFRE,TFOR)
+!      ENDIF
+!
+!      STATUS=CHANGEDIRQQ(DNAME)
+!
+!      CALL RESULTS(NFILE,NCASE,CASENAME,NODE,FREQ,X,Y,Z,MCR,NB,DIR, &
+!         MIN,MAX,INC,NFREQ,NNODE,IFP,FP,NVIEW,NODEV,DESC, &
+!          NRPM,GRPM,GFRE,GFOR,TORD,TRPM,TFRE,TFOR,HGT)
+!    
+   !   STATUS=CHANGEDIRQQ("../")
+    !   STATUS=MAKEDIRQQ(TEST2)
+    !	  STATUS=CHANGEDIRQQ(TEST2)
+          
+!CALL subroutine test(TV1,TL1,TT1,TV12,TL12,TT12)
+      
+     !     CALL ISOCAL(M,N,CASENAME,NODE,NRPM,RPM,MCR,NNODE,NVIEW, &
+     !            	  IFI,IFP,NODEV,DESC,GV1,GL1,GT1, &
+      !                   PVA,PLA,PTA,RPMV,RPML,RPMT,AVM,ALM,ATM, &
+     !                 SUMV,SUML,SUMT)
+       
+	stop
+
+    end
+    
+    
+    
+    
+    
+    
+    
+    
+    
